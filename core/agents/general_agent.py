@@ -21,15 +21,27 @@ from collections import defaultdict, deque
 from typing import  Optional
 import threading
 import time
-from crewai import Agent, Task, Crew,LLM
-from crewai_tools import (
-    WebsiteSearchTool, FileReadTool, BaseTool, ScrapeWebsiteTool,
-    DirectoryReadTool, SerperDevTool, TXTSearchTool, EXASearchTool,
-    CodeDocsSearchTool, CodeInterpreterTool, CSVSearchTool, DOCXSearchTool,
-    DirectorySearchTool, JSONSearchTool, MDXSearchTool, PDFSearchTool,
- ScrapeElementFromWebsiteTool, SeleniumScrapingTool,
-    XMLSearchTool, YoutubeChannelSearchTool, YoutubeVideoSearchTool
-)
+try:
+    from crewai import Agent, Task, Crew,LLM
+    from crewai_tools import (
+        WebsiteSearchTool, FileReadTool, BaseTool, ScrapeWebsiteTool,
+        DirectoryReadTool, SerperDevTool, TXTSearchTool, EXASearchTool,
+        CodeDocsSearchTool, CodeInterpreterTool, CSVSearchTool, DOCXSearchTool,
+        DirectorySearchTool, JSONSearchTool, MDXSearchTool, PDFSearchTool,
+     ScrapeElementFromWebsiteTool, SeleniumScrapingTool,
+        XMLSearchTool, YoutubeChannelSearchTool, YoutubeVideoSearchTool
+    )
+except ImportError:
+    Agent = Task = Crew = LLM = None
+    WebsiteSearchTool = FileReadTool = ScrapeWebsiteTool = None
+    DirectoryReadTool = SerperDevTool = TXTSearchTool = EXASearchTool = None
+    CodeDocsSearchTool = CodeInterpreterTool = CSVSearchTool = DOCXSearchTool = None
+    DirectorySearchTool = JSONSearchTool = MDXSearchTool = PDFSearchTool = None
+    ScrapeElementFromWebsiteTool = SeleniumScrapingTool = None
+    XMLSearchTool = YoutubeChannelSearchTool = YoutubeVideoSearchTool = None
+    # Provide a dummy BaseTool when crewai_tools is not available
+    class BaseTool:
+        pass
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
 import yfinance as yf

@@ -3,11 +3,20 @@ from PyQt5.QtCore import QObject
 from PyQt5.QtCore import  pyqtSignal
 from config import loggers
 import numpy as np
-from langchain.tools.human.tool import HumanInputRun
+try:
+    from langchain_community.tools import HumanInputRun
+except (ImportError, ModuleNotFoundError):
+    try:
+        from langchain.tools.human.tool import HumanInputRun
+    except (ImportError, ModuleNotFoundError):
+        HumanInputRun = None
 import time
 import webrtcvad
 import collections
-import pyaudio
+try:
+    import pyaudio
+except ImportError:
+    pyaudio = None
 
 
 log=loggers['AUDIO']

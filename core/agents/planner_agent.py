@@ -17,7 +17,10 @@ from datetime import datetime, timedelta
 from collections import deque
 from functools import lru_cache
 import hashlib
-from langchain.prompts import ChatPromptTemplate
+try:
+    from langchain_core.prompts import ChatPromptTemplate
+except ImportError:
+    from langchain.prompts import ChatPromptTemplate
 from core.Agent_models import get_model
 from pydantic import BaseModel, Field
 import logging

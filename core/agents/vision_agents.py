@@ -6,12 +6,24 @@ from io import BytesIO
 from datetime import datetime
 from pydantic import Field
 from typing import Callable, List, Dict, Optional
-from crewai import Agent, Task, Crew, Process, LLM
-from crewai_tools import BaseTool, FileWriterTool
+try:
+    from crewai import Agent, Task, Crew, Process, LLM
+except ImportError:
+    Agent = Task = Crew = Process = LLM = None
+try:
+    from crewai_tools import BaseTool, FileWriterTool
+except ImportError:
+    FileWriterTool = None
+    # Provide a dummy BaseTool when crewai_tools is not available
+    class BaseTool:
+        pass
 import cv2
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor
-import torch
+try:
+    import torch
+except ImportError:
+    torch = None
 
 from config import JARVIS_DIR, SessionManager
 from core.Agent_models import  get_model_from_database

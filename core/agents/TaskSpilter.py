@@ -1,11 +1,17 @@
 import asyncio
 from langgraph.graph import StateGraph, END, START
 from langgraph.prebuilt import ToolExecutor, ToolInvocation
-from langchain.tools.base import Tool
+try:
+    from langchain_core.tools import Tool
+except ImportError:
+    from langchain.tools import Tool
 from core.memory.memory_agent import MemorySettings
 from typing import List, Dict, Callable
 import logging
-from langchain.prompts import ChatPromptTemplate
+try:
+    from langchain_core.prompts import ChatPromptTemplate
+except ImportError:
+    from langchain.prompts import ChatPromptTemplate
 from core.Agent_models import get_model  # Assumed to return an LLM chain
 import re, json
 from typing_extensions import TypedDict

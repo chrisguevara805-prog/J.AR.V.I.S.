@@ -1,7 +1,10 @@
 import os
 import json
 import openai
-from .db.env_database import EnvDatabase
+try:
+    from .db.env_database import EnvDatabase
+except ImportError:
+    EnvDatabase = None
 from .virtual_filesystem import VirtualFileSystem
 from config import JARVIS_DIR
 from jarvis_integration.models.command_history import CommandHistory
@@ -33,7 +36,7 @@ class TerminalManager:
 
     def __init__(self):
         self.vfs = VirtualFileSystem()
-        self.db = EnvDatabase()
+        self.db = EnvDatabase() if EnvDatabase else None
         self.history = []
         self.history_index = -1
         self.load_history()
@@ -45,8 +48,14 @@ class TerminalManager:
 
     def init_openai(self):
         """Initialize OpenAI client"""
-        env_vars = self.db.get_all_vars()
-        api_key = env_vars.get("OPENAI_API_KEY")
+        api_key = None
+        if self.db:
+            env_vars = self.db.get_all_vars()
+            api_key = env_vars.get("OPENAI_API_KEY")
+        else:
+            # Fallback to environment variable
+            api_key = os.environ.get("OPENAI_API_KEY")
+        
         if api_key:
             self.openai_client = openai.OpenAI(api_key=api_key)
 

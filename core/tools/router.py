@@ -2,13 +2,19 @@ from core.tools.standard_tools import *
 from langchain_community.tools import YouTubeSearchTool
 
 from langchain_community.tools import ShellTool
-from crewai.tools.base_tool import BaseTool as CrewAIBaseTool, Tool as CrewAITool
+try:
+    from crewai.tools.base_tool import BaseTool as CrewAIBaseTool, Tool as CrewAITool
+except ImportError:
+    CrewAIBaseTool = CrewAITool = None
 from typing import  List
 from langchain_community.tools.yahoo_finance_news import YahooFinanceNewsTool
 from langchain_community.tools.ddg_search.tool import DuckDuckGoSearchRun
 from core.tools.calculator import CalculatorTool
 from core.tools.stop import StopTool
-from core.tools.winget import create_winget_tools
+try:
+    from core.tools.winget import create_winget_tools
+except ImportError:
+    create_winget_tools = None
 from core.tools.sensors import create_sensor_tools
 from core.tools.scheduler import create_schedule_tools
 from core.tools.consciousness import create_consciousness_tools
@@ -29,7 +35,7 @@ class ToolRouter:
             DuckDuckGoSearchRun(),
         ] +
         create_schedule_tools() +
-        create_winget_tools() +
+        (create_winget_tools() if create_winget_tools else []) +
         create_sensor_tools() +
         create_consciousness_tools()
             )

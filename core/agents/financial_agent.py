@@ -1,14 +1,29 @@
 import json
 import os.path
 
-from crewai import Agent, Task, Crew, LLM
-from crewai_tools import BaseTool
+try:
+    from crewai import Agent, Task, Crew, LLM
+    from crewai_tools import BaseTool
+except ImportError:
+    Agent = Task = Crew = LLM = None
+    # Provide a dummy BaseTool when crewai_tools is not available
+    class BaseTool:
+        pass
 import numpy as np
 import yfinance as yf
-from langchain.prompts import PromptTemplate
+try:
+    from langchain.prompts import PromptTemplate
+except ImportError:
+    try:
+        from langchain_core.prompts import PromptTemplate
+    except ImportError:
+        PromptTemplate = None
 from typing import List, Dict, Any
 from core.Agent_models import get_model_from_database, get_model
-from crewai_tools.tools.website_search.website_search_tool import WebsiteSearchTool
+try:
+    from crewai_tools.tools.website_search.website_search_tool import WebsiteSearchTool
+except ImportError:
+    WebsiteSearchTool = None
 import re
 from config import SESSION_PATH
 
@@ -18,7 +33,6 @@ import time
 from typing import List, Dict, Any
 import yfinance as yf
 import numpy as np
-from crewai_tools import BaseTool
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from requests.exceptions import HTTPError
 
@@ -149,7 +163,6 @@ class ScenarioSimulationTool(BaseTool):
                 "return_difference": strategy_result["expected_value"] - baseline_result["expected_value"]
             }
         })
-
 
 class FinancialAgent:
     def __init__(self):

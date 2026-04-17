@@ -24,7 +24,10 @@ from core.agents.planner_agent import VisionRouter
 from core.agents.vision_agents import vision_agent
 from concurrent.futures import ThreadPoolExecutor
 import logging
-from crewai import Agent, Task, Crew, LLM
+try:
+    from crewai import Agent, Task, Crew, LLM
+except ImportError:
+    Agent = Task = Crew = LLM = None
 
 import os
 import re
@@ -40,7 +43,10 @@ from typing import Optional
 import asyncio
 
 import speech_recognition as sr
-import easyocr
+try:
+    import easyocr
+except ImportError:
+    easyocr = None
 import socket
 import netifaces
 from core.memory.memory_agent import MemorySettings

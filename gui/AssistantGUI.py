@@ -19,7 +19,10 @@ from config import JARVIS_DIR
 from gui.user_setting import UserDialog
 from gui.AssistantOpenGLWidget import AssistantOpenGLWidget
 from config import SESSION_PATH
-import pyaudio
+try:
+    import pyaudio
+except ImportError:
+    pyaudio = None
 import pvporcupine
 import json
 import threading

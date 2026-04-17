@@ -19,17 +19,33 @@ import hashlib
 import requests
 from datetime import datetime
 from collections import defaultdict, deque
-from crewai import Agent, Task, Crew, LLM
-from crewai_tools import (
-    WebsiteSearchTool, FileReadTool, BaseTool, ScrapeWebsiteTool,
-    DirectoryReadTool, SerperDevTool, TXTSearchTool, EXASearchTool,
-    CodeDocsSearchTool,  CodeInterpreterTool,
-    CSVSearchTool, DOCXSearchTool, DirectorySearchTool,
-    JSONSearchTool, MDXSearchTool, PDFSearchTool,
-    RagTool, ScrapeElementFromWebsiteTool,
-    SeleniumScrapingTool, XMLSearchTool, YoutubeChannelSearchTool,
+try:
+    from crewai import Agent, Task, Crew, LLM
+except ImportError:
+    Agent = Task = Crew = LLM = None
+try:
+    from crewai_tools import (
+        WebsiteSearchTool, FileReadTool, BaseTool, ScrapeWebsiteTool,
+        DirectoryReadTool, SerperDevTool, TXTSearchTool, EXASearchTool,
+        CodeDocsSearchTool,  CodeInterpreterTool,
+        CSVSearchTool, DOCXSearchTool, DirectorySearchTool,
+        JSONSearchTool, MDXSearchTool, PDFSearchTool,
+        RagTool, ScrapeElementFromWebsiteTool,
+        SeleniumScrapingTool, XMLSearchTool, YoutubeChannelSearchTool,
     YoutubeVideoSearchTool
 )
+except ImportError:
+    WebsiteSearchTool = FileReadTool = ScrapeWebsiteTool = None
+    DirectoryReadTool = SerperDevTool = TXTSearchTool = EXASearchTool = None
+    CodeDocsSearchTool = CodeInterpreterTool = None
+    CSVSearchTool = DOCXSearchTool = DirectorySearchTool = None
+    JSONSearchTool = MDXSearchTool = PDFSearchTool = None
+    RagTool = ScrapeElementFromWebsiteTool = None
+    SeleniumScrapingTool = XMLSearchTool = YoutubeChannelSearchTool = None
+    YoutubeVideoSearchTool = None
+    # Provide a dummy BaseTool when crewai_tools is not available
+    class BaseTool:
+        pass
 import yfinance as yf
 import threading
 import time

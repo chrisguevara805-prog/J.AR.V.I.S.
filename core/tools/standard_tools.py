@@ -15,7 +15,10 @@
 from jarvis_integration.models.users import Users
 from config import SESSION_PATH,SessionManager
 import json
-from langchain.tools.base import tool
+try:
+    from langchain_core.tools import tool
+except ImportError:
+    from langchain.tools import tool
 from core import get_model
 import traceback
 import nmap
@@ -23,10 +26,25 @@ import importlib
 import inspect
 from typing import Type, List, Optional, Any
 from pydantic import BaseModel, create_model
-from langchain.tools import BaseTool
-from langchain.tools import StructuredTool
-import nextcloud_client
-from crewai_tools import BaseTool
+try:
+    from langchain_core.tools import BaseTool, StructuredTool
+except ImportError:
+    try:
+        from langchain.tools import BaseTool, StructuredTool
+    except ImportError:
+        # Provide fallback BaseTool and StructuredTool
+        class BaseTool:
+            pass
+        class StructuredTool:
+            pass
+try:
+    import nextcloud_client
+except ImportError:
+    nextcloud_client = None
+try:
+    from crewai_tools import BaseTool as CrewAIBaseTool
+except ImportError:
+    CrewAIBaseTool = None
 from datetime import datetime
 import os
 from pydantic import Field
