@@ -43,7 +43,10 @@ from watchdog.events import FileSystemEventHandler
 
 # CrewAI and LangChain imports (assuming these modules are installed)
 from crewai import Agent, Task, Crew, Process, LLM
-from langchain.tools import tool
+try:
+    from langchain_core.tools import tool
+except (ImportError, ModuleNotFoundError):
+    from langchain.tools import tool
 from config import JARVIS_DIR
 
 

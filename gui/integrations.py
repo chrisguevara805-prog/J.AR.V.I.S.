@@ -23,7 +23,10 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QFont
 from config import  JARVIS_DIR
-from langchain.tools import BaseTool
+try:
+    from langchain_core.tools import BaseTool
+except (ImportError, ModuleNotFoundError):
+    from langchain.tools import BaseTool
 from typing import List, Optional
 # from crewai import Agent, Task, Crew
 # from crewai.tools import tool
